@@ -1,5 +1,6 @@
 require 'thor'
 require 'pathname'
+require 'lambdart/sync'
 
 module Lambdart
   module CLI
@@ -11,7 +12,8 @@ module Lambdart
 
       desc "role <role name>", "Sync the specified role"
       def role(role_name)
-        puts "This feature is not yet implemented"
+                
+        Lambdart::Sync.sync_role(role_name)
       end
 
       desc "function <function_name> [env]", "Sync the specified function"

@@ -1,4 +1,5 @@
 require 'pathname'
+require 'json'
 
 require_relative 'utils'
 
@@ -75,7 +76,7 @@ module Manager
     # TODO: change 'fails' to raise exceptions instead 
     role_config = {}
     begin
-      role_conf = JSON.parse(File.read("roles/#{role_name}.json")) 
+      role_conf = JSON.parse(File.read((find_project_root+"roles"+"#{role_name}.json").to_s)) 
     rescue => e
       fail "The role config file #{role_name}.json contains a syntax error or does not exist:\n#{e}"
     else
