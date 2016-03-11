@@ -1,17 +1,51 @@
 require 'thor'
 require 'pathname'
+require 'yaml'
+
 require 'lambdart/cli/list'
 require 'lambdart/cli/sync'
+require 'lambdart/cli/create'
+require 'lambdart/cli/function'
+require 'lambdart/cli/role'
+
+
+# these commands require a created and configured project
+$project_commands = %w(list sync create function role)
 
 module Lambdart
 
   class LambdartCLI < Thor
-    desc "hello NAME", "This will greet you"
-    option :upcase
-    def hello( name )
-      greeting = "Hello, #{name}"
-      greeting.upcase! if options[:upcase]
-      puts greeting
+    def initialize(*args)
+      super
+      # FIXME: probably a better way of doing this
+      # unless we're initializing a new project find our project root, load our secrets files, and create AWS clients
+      if $project_commands.include? args[2][:current_command].name
+        root = Manager.find_project_root
+        creds = YAML.load(File.read((root+'secrets.yml')).to_s)
+        $lambda_client = Aws::Lambda::Client.new(
+          access_key_id: creds['AWS_ACCESS_KEY_ID'],
+          secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
+          region: creds['AWS_DEFAULT_REGION']
+        )
+        $s3_client = Aws::S3::Client.new(
+          access_key_id: creds['AWS_ACCESS_KEY_ID'],
+          secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
+          region: creds['AWS_DEFAULT_REGION']
+        )
+        $iam_client = Aws::IAM::Client.new(
+          access_key_id: creds['AWS_ACCESS_KEY_ID'],
+          secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
+          region: creds['AWS_DEFAULT_REGION']
+        )
+        $project_root = Manager.find_project_root
+        $project_config = Manager.read_project_config
+      end
+    end
+
+
+    desc "init <project name>", "creates a new lambdart project in specified project directory"
+    def init(project_name)
+      
     end
 
     desc "list SUBCOMMAND ...ARGS", "list functions, roles, templates, etc"
@@ -19,6 +53,15 @@ module Lambdart
 
     desc "sync SUBCOMMAND ...ARGS", "sync functions, roles, etc"
     subcommand "sync", Lambdart::CLI::Sync
+
+    desc "create SUBCOMMAND ...ARGS", "create functions, roles, etc"
+    subcommand "create", Lambdart::CLI::Create
+
+    desc "function SUBCOMMAND ...ARGS", "perform function tasks, etc."
+    subcommand "function", Lambdart::CLI::Function
+
+    desc "role SUBCOMMAND ...ARGS", "perform role tasks, etc."
+    subcommand "role", Lambdart::CLI::Role
   end
 
 end

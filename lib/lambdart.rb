@@ -10,25 +10,25 @@ require "lambdart/utils"
 require 'yaml'
 require 'aws-sdk'
 
-creds = YAML.load(File.read((Manager.find_project_root+'secrets.yml')).to_s)
-$lambda_client = Aws::Lambda::Client.new(
-  access_key_id: creds['AWS_ACCESS_KEY_ID'],
-  secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
-  region: creds['AWS_DEFAULT_REGION']
-)
-$s3_client = Aws::S3::Client.new(
-  access_key_id: creds['AWS_ACCESS_KEY_ID'],
-  secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
-  region: creds['AWS_DEFAULT_REGION']
-)
-$iam_client = Aws::IAM::Client.new(
-  access_key_id: creds['AWS_ACCESS_KEY_ID'],
-  secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
-  region: creds['AWS_DEFAULT_REGION']
-)
+#creds = YAML.load(File.read((Manager.find_project_root+'secrets.yml')).to_s)
+#$lambda_client = Aws::Lambda::Client.new(
+#  access_key_id: creds['AWS_ACCESS_KEY_ID'],
+#  secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
+#  region: creds['AWS_DEFAULT_REGION']
+#)
+#$s3_client = Aws::S3::Client.new(
+#  access_key_id: creds['AWS_ACCESS_KEY_ID'],
+#  secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
+#  region: creds['AWS_DEFAULT_REGION']
+#)
+#$iam_client = Aws::IAM::Client.new(
+#  access_key_id: creds['AWS_ACCESS_KEY_ID'],
+#  secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
+#  region: creds['AWS_DEFAULT_REGION']
+#)
+#$project_root = Manager.find_project_root
+#$project_config = Manager.read_project_config
 
-$project_root = Manager.find_project_root
-$project_config = Manager.read_project_config
 
 module Lambdart
   # Your code goes here...

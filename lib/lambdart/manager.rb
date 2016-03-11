@@ -44,7 +44,7 @@ module Manager
       project_config = dir.children.select { |c| c.file? and c.extname.to_s == ".lambdart" }
       return project_config.first if project_config.any?
     end
-    raise FileNotFoundException, "Could not find a *.lambdart project file, are you somewhere in a lambdart project?"
+    abort("Could not find a *.lambdart project file, are you somewhere in a lambdart project?")
   end
 
   def self.read_project_config
