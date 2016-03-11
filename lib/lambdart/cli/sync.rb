@@ -12,13 +12,12 @@ module Lambdart
 
       desc "role <role name>", "Sync the specified role"
       def role(role_name)
-                
         Lambdart::Sync.sync_role(role_name)
       end
 
       desc "function <function_name> [env]", "Sync the specified function"
       def function(function_name, env="")
-        puts "This feature is not yet implemented"
+        Lambdart::Sync.sync_function(function_name, env)
       end
     end
   end

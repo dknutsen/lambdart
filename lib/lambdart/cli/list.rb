@@ -8,20 +8,12 @@ module Lambdart
     class List < Thor
       desc "functions", "List all functions that are part of this project"
       def functions()
-        begin
-          puts (Manager.find_project_root+"src").children.select{|file| file.directory?}.map(&:basename)
-        rescue => e
-          puts "Could not find a *.lambdart project file, are you somewhere in a lambdart project?"
-        end
+        puts Manager.get_local_functions
       end
 
       desc "roles", "List all roles that are part of this project"
       def roles()
-        begin
-          puts (Manager.find_project_root+"roles").children.select{|file| file.file? and file.extname == ".json"}.map(&:basename)
-        rescue => e
-          puts "Could not find a *.lambdart project file, are you somewhere in a lambdart project?"
-        end
+        puts Manager.get_local_roles
       end
     
       desc "templates", "List all tempaltes that are part of this project"

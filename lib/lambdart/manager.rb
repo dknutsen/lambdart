@@ -1,7 +1,8 @@
 require 'pathname'
 require 'json'
+require 'Open3'
 
-require_relative 'utils'
+require 'lambdart/utils'
 
 module Manager
 
@@ -43,7 +44,7 @@ module Manager
       project_config = dir.children.select { |c| c.file? and c.extname.to_s == ".lambdart" }
       return project_config.first if project_config.any?
     end
-    raise FileNotFoundException, "Could not find a lambdart project file, maybe create a project?"
+    raise FileNotFoundException, "Could not find a *.lambdart project file, are you somewhere in a lambdart project?"
   end
 
   def self.read_project_config
@@ -54,7 +55,7 @@ module Manager
     # TODO: change 'fails' to raise exceptions instead 
     function_config = {}
     begin
-      function_conf = JSON.parse(File.read("src/#{function_name}/config.json")) 
+      function_conf = JSON.parse(File.read(($project_root+"src"+"#{function_name}"+"config.json").to_s))
     rescue => e
       fail "The function config file contains a syntax error:\n#{e}"
     else
@@ -76,7 +77,7 @@ module Manager
     # TODO: change 'fails' to raise exceptions instead 
     role_config = {}
     begin
-      role_conf = JSON.parse(File.read((find_project_root+"roles"+"#{role_name}.json").to_s)) 
+      role_conf = JSON.parse(File.read(($project_root+"roles"+"#{role_name}.json").to_s)) 
     rescue => e
       fail "The role config file #{role_name}.json contains a syntax error or does not exist:\n#{e}"
     else
@@ -89,6 +90,14 @@ module Manager
     return role_config
   end
 
+
+  def self.get_local_functions()
+    (Manager.find_project_root+"src").children.select{|file| file.directory?}.map(&:basename).map(&:to_s)
+  end
+
+  def self.get_local_roles()
+    (Manager.find_project_root+"roles").children.select{|file| file.file? and file.extname == ".json"}.map(&:basename).map(&:to_s)
+  end
 
   # given a function config and the function build path, installs all dependencies
   def self.install_function_dependencies(build_path, config)
@@ -104,9 +113,9 @@ module Manager
 
 
   # given a file path, creates the leaf directory and any parents that don't exist
-  def self.create_project_directory(project_root, directories)
+  def self.create_project_directory(directories)
     args = directories.is_a?(String) ? directories.split(File::SEPARATOR) : directories
-    build_path = File.join(project_root, directories)
+    build_path = File.join($project_root, directories)
     unless File.directory?(build_path)
       puts("  Creating directory: #{build_path}")
       FileUtils::mkdir_p build_path
@@ -115,15 +124,15 @@ module Manager
 
 
   # creates a function build directory and copies function src into it
-  def self.copy_function_src_to_build(project_root, config)
+  def self.copy_function_src_to_build(config)
     Utils.validate_config_args(%w[name full_name], config)
 
-    function_src = File.join(project_root, "src", config['name'])
-    function_build_path = File.join(project_root, "build", config['full_name'])
+    function_src = File.join($project_root, "src", config['name'])
+    function_build_path = File.join($project_root, "build", config['full_name'])
 
     #TODO: do we need to delete and then recreate? better method?
     ignore, error = Open3.capture2 "rm -rf #{function_build_path}"
-    create_project_directory(project_root, ['build', config['full_name']]) unless File.directory?(function_build_path)
+    create_project_directory(['build', config['full_name']]) unless File.directory?(function_build_path)
 
     # copy function source files
     # TODO: make this more failproof, maybe loop
@@ -144,24 +153,24 @@ module Manager
   end
 
 
-  def self.create_function_zip(project_root, config)
+  def self.create_function_zip(config)
     Utils.validate_config_args(%w[full_name], config)
 
     # TODO: use different zip method? Like ruby class?
-    zip_path = "#{project_root}/dist/#{config['full_name']}.zip"
-    system "cd #{project_root}/build/#{config['full_name']}; zip -r #{zip_path} .  > /dev/null"
+    zip_path = "#{$project_root}/dist/#{config['full_name']}.zip"
+    system "cd #{$project_root}/build/#{config['full_name']}; zip -r #{zip_path} .  > /dev/null"
     return zip_path
   end
 
 
   # make this into a public command?
-  def self.build_function(project_root, config)
+  def self.build_function(config)
     Utils.validate_config_args(%w[name full_name], config)
 
-    build_path = copy_function_src_to_build(project_root, config)
+    build_path = copy_function_src_to_build(config)
     install_function_dependencies(build_path, config)
-    create_project_directory(project_root, "dist")
-    return create_function_zip(project_root, config)
+    create_project_directory("dist")
+    return create_function_zip(config)
   end
 
 

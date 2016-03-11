@@ -1,5 +1,11 @@
 require "lambdart/version"
 require "lambdart/cli"
+require "lambdart/iam"
+require "lambdart/lambda"
+require "lambdart/manager"
+require "lambdart/s3"
+require "lambdart/sync"
+require "lambdart/utils"
 
 require 'yaml'
 require 'aws-sdk'
@@ -21,13 +27,16 @@ $iam_client = Aws::IAM::Client.new(
   region: creds['AWS_DEFAULT_REGION']
 )
 
+$project_root = Manager.find_project_root
+$project_config = Manager.read_project_config
+
 module Lambdart
   # Your code goes here...
-  autoload :Lambda, 'lambdart/lambda'
-  autoload :S3, 'lambdart/s3'
-  autoload :Manager, 'lambdart/manager'
-  autoload :Iam, 'lambdart/iam'
-  autoload :Sync, 'lambdart/sync'
+#  autoload :Lambda, 'lambdart/lambda'
+#  autoload :S3, 'lambdart/s3'
+#  autoload :Manager, 'lambdart/manager'
+#  autoload :Iam, 'lambdart/iam'
+#  autoload :Sync, 'lambdart/sync'
   
 end
 
