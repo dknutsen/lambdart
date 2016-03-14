@@ -5,6 +5,7 @@ require "lambdart/lambda"
 require "lambdart/manager"
 require "lambdart/s3"
 require "lambdart/sync"
+require "lambdart/template"
 require "lambdart/utils"
 
 require 'yaml'

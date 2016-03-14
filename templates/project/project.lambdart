@@ -1,0 +1,6 @@
+{
+  "project": "<%= project_name %>",
+  "aws_prefix": "<%= project_name %>_",
+  "version": "0.1"
+}
+

@@ -12,8 +12,14 @@ module Lambdart
       end
 
       desc "add_env", "Add an environment to the function (config and .env file)"
-      def add_env()
+      def add_env(function_name, env_name)
         puts "This functionality has not been implemented yet"
+        # load function config
+        # add to environments list (create list if it doesn't exist already)
+        # write function config
+        # write .env file in the function src directory
+        filename = $project_root + "src" + function_name + "#{env_name}.env"
+        File.open(local_filename, 'w') {|f| f.write("ENVIRONMENT=\"#{env_name}\"") }
       end
     end
  
