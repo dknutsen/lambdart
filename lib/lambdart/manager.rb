@@ -11,15 +11,18 @@ module Manager
   RUNTIMES = {
     "python" => {
       :name => "python2.7",
-      :package_manager => "pip install PACKAGE -t PATH"
+      :package_manager => "pip install PACKAGE -t PATH",
+      :extension => "py"
     },
     "node" => {
       :name => "nodejs",
-      :package_manager => "npm install PACKAGE"
+      :package_manager => "npm install PACKAGE",
+      :extension => "js"
     },
     "java" => {
       :name => "java8",
-      :package_manager => "PUTSOMETHINGHERE"
+      :package_manager => "PUTSOMETHINGHERE",
+      :extension => "java"
     }
   }
   REVERSE_RUNTIMES = {
@@ -96,7 +99,19 @@ module Manager
   end
 
   def self.get_local_roles()
-    (Manager.find_project_root+"roles").children.select{|file| file.file? and file.extname == ".json"}.map(&:basename).map(&:to_s)
+    (Manager.find_project_root+"roles").children.select{|file| file.file? and file.extname == ".json"}.map(&:basename).map(&:to_s).map{|n| n.split('.')[0]}
+  end
+
+  def self.get_local_function_templates()
+    return {
+      "python" => (find_project_root+"templates"+"roles"+"python").children.map(&:basename).map(&:to_s),
+      "node" => (find_project_root+"templates"+"roles"+"node").children.map(&:basename).map(&:to_s),
+      "java" => (find_project_root+"templates"+"roles"+"java").children.map(&:basename).map(&:to_s),
+    }
+  end
+
+  def self.get_local_role_templates()
+    (find_project_root+"templates"+"roles").children.map(&:basename).map(&:to_s)
   end
 
   # given a function config and the function build path, installs all dependencies

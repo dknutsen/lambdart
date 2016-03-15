@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "s3": [{
+      "actions": [],
+      "bucket": "*"
+    }],
+    "logging": [{
+      "actions": []
+    }],
+    "lambda_invoke": [{
+      "actions": []
+    }]
+  }
+}

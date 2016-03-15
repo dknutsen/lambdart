@@ -45,7 +45,9 @@ module Lambdart
 
     desc "init <project name>", "creates a new lambdart project in specified project directory"
     def init(project_name)
-      generator = Lambdart::Template::ProjectGenerator.new([project_name]) #({project_name:project_name}) #project_name
+      generator = Lambdart::Generators::ProjectGenerator.new([project_name]) #({project_name:project_name}) #project_name
+      #generator.source_root = File.join(File.dirname(__FILE__), "..", "..", "..", "templates", "project")
+      Lambdart::Generators::ProjectGenerator.source_root(File.join(File.dirname(__FILE__), "..", "..", "templates", "project"))
       generator.destination_root = File.join(Dir.pwd, project_name)
       generator.invoke_all
     end

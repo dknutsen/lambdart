@@ -1,11 +1,11 @@
 require "lambdart/version"
 require "lambdart/cli"
+require "lambdart/generators"
 require "lambdart/iam"
 require "lambdart/lambda"
 require "lambdart/manager"
 require "lambdart/s3"
 require "lambdart/sync"
-require "lambdart/template"
 require "lambdart/utils"
 
 require 'yaml'
