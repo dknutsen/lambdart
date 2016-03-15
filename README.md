@@ -14,7 +14,7 @@ Managing lambda functions via the AWS console can be tedious, especially if you 
 * Abstract away much of the role/permissions boilerplate
 * Support any of the AWS Lambda supported runtimes (currently Node, Python and Java) and allow any combination of these runtimes within a project
 
-If you intend to mostly use Lambda as an API server alternative via API Gateway, lambdart will work but it may not be the best choice. I'd recommend checking out [Serverless](https://github.com/serverless/serverless)
+If you intend to mostly use Lambda as an API server alternative using API Gateway, lambdart will work (eventually) but it may not be the best choice. I'd recommend checking out [Serverless](https://github.com/serverless/serverless)
 
 ## Installation - WTF do I have to do to install it?
 
@@ -26,15 +26,26 @@ It's that easy.
 
 First create a project
 
-Next edit your project config
+    $ lambdart init <project name>
 
-Now create a function
+
+Next enter the new project directory and edit your project file. All you'll want to do for starters is make sure you're ok with your AWS prefix (will be added to all functions and roles once they are synced to AWS)
+
+Now create a function (runtime is either "node", "python" or "java")
+
+    $ lambdart create function <function name> <runtime>
+
 
 Now create a role for that function
 
-Now edit the funciton config to include the role
+    $ lambdart create role <role_name>
+
+Now edit the function config (src/<function_name>/config.json) to include the role
 
 Now sync the function
+
+    $ lambdart sync function <function_name>
+
 
 ## Development
 
