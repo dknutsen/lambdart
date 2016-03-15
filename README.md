@@ -24,26 +24,30 @@ It's that easy.
 
 ## WTF should I do with this thing?
 
-First create a project
+##### Create a project
 
     $ lambdart init <project name>
 
+##### Edit secrets.yml
+Next enter the new project directory and edit the `secrets.yml` file. You'll want to put your AWS access key, secret key, and region where the placeholders are. This will allow you to perform AWS operations via lambdart (which is built on the Ruby aws-sdk).
 
-Next enter the new project directory and edit the secrets.yml file. You'll want to put your AWS access key, secret key, and region where the placeholders are. This will allow you to perform AWS operations via lambdart (which is built on the Ruby aws-sdk).
+##### Edit project config
+Now you'll want to edit your project config (`<project name>.lambdart`). All you'll want to do for starters is make sure you're ok with the AWS prefix (will be added to all functions and roles once they are synced to AWS)
 
-Now you'll want to edit your project config (<project name>.lambdart). All you'll want to do for starters is make sure you're ok with the AWS prefix (will be added to all functions and roles once they are synced to AWS)
-
-Now create a function (runtime is either "node", "python" or "java")
+##### Create a function
+Now create a function (runtime is either `node`, `python` or `java`)
 
     $ lambdart create function <function name> <runtime>
 
-
+##### Create a role
 Now create a role for that function
 
     $ lambdart create role <role_name>
 
-Now edit the function config (src/<function_name>/config.json) to include the role.
+##### Add the role to the function
+Now edit the function config (`src/<function_name>/config.json`) to include the role.
 
+##### Sync the function
 Now sync the function
 
     $ lambdart sync function <function_name>
