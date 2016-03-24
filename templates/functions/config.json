@@ -1,0 +1,24 @@
+{
+  "name":        "<%= name %>",
+  "description": "<%= description %>",
+  "runtime":     "<%= runtime %>",
+  "role":        "<%= role_name %>",
+  "handler":     "file_name.function_name",
+  "timeout":     <%= timeout %>,
+  "memory_size": <%= memory_size %>,
+  "event_sources": {
+    "s3": [{
+      "name": "event_source_name",
+      "bucket": "bucket_name",
+      "events": ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"],
+      "prefix": "dir_name/another_dir/",
+      "suffix": "mp3"
+    }]
+  },
+  "environments": [],
+  "function_per_env": false,
+  "dependencies": [
+
+  ]
+}
+

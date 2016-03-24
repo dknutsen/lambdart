@@ -13,14 +13,21 @@ module Lambdart
 
       desc "add_env", "Add an environment to the function (config and .env file)"
       def add_env(function_name, env_name)
-        puts "This functionality has not been implemented yet"
-        # load function config
-        # add to environments list (create list if it doesn't exist already)
-        # write function config
+        # read the config file, add the env to it, write it
+        config = Manager.read_function_config(function_name)
+        config['environments'] = [] unless config.include? 'environments'
+        config['environments'].push env_name unless config['environments'].include? env_name
+        Manager.write_function_config(function_name, config)
         # write .env file in the function src directory
         filename = $project_root + "src" + function_name + "#{env_name}.env"
-        File.open(local_filename, 'w') {|f| f.write("ENVIRONMENT=\"#{env_name}\"") }
+        File.open(filename, 'w') {|f| f.write("ENVIRONMENT=\"#{env_name}\"") }
       end
+
+      # remove_env
+
+      # set/change_role(function_name, role_name)
+
+      # 
     end
  
  end

@@ -31,6 +31,7 @@ module Manager
     "java8" => "java"
   }
   EVENT_SOURCES = %w[s3 dynamodb]
+  FUNCTION_CONFIG_FIELDS = %w[name description runtime role handler timeout memory_size event_sources environments function_per_env dependencies]
 
   # filetypes that will be copied from the function source to the build directory
   # TODO: move this into the project config file so users can change it
@@ -54,6 +55,8 @@ module Manager
     JSON.parse(find_project_config.read)
   end
 
+
+  # reads and validates a function configuration file
   def self.read_function_config(function_name)
     # TODO: change 'fails' to raise exceptions instead 
     function_config = {}
@@ -64,16 +67,39 @@ module Manager
     else
       function_config = function_conf
     end
-
+    
     # Validation
-    fail "Function #{function_name} config 'runtime' value is invalid" unless RUNTIMES.include? function_config['runtime']
-    fail "Invalid event source type" unless function_config['event_sources'].all?{|type,source| EVENT_SOURCES.include? type}
+    valid = function_config_valid?(function_config)
+    abort(valid) unless valid == true
 
     # Do some extra processing
     function_config['aws_runtime'] = RUNTIMES[function_config['runtime']][:name]  #TODO: should we do this here?!?
 
     return function_config
   end
+
+  def self.write_function_config(function_name, config)
+    # valudation
+    abort("Failed to write function config file, function named #{function_name} does not exist.") unless get_local_functions.include? function_name
+    valid = function_config_valid?(config)
+    abort(valid) unless valid == true
+    # filter out any additional crap we've tacked onto the config object
+    config_file = {}
+    puts FUNCTION_CONFIG_FIELDS
+    config.each {|item, value| puts config_file[item] = value if FUNCTION_CONFIG_FIELDS.include?(item)}
+    # now write it
+    File.open(($project_root+"src"+function_name+"config.json").to_s, "w") do |f|
+      f.write(JSON.pretty_generate(config_file))
+    end 
+  end
+  
+  def self.function_config_valid?(config)
+    # FIXME: I feel like this whole "return a string or a true" is kinda dumb. Fix it?
+    return "Function #{config['function_name']} config 'runtime' value is invalid" unless RUNTIMES.include? config['runtime']
+    return "Invalid event source type" unless config['event_sources'].all?{|type,source| EVENT_SOURCES.include? type}
+    return true
+  end
+
 
   # reads and validates a role configuration file
   def self.read_role_config(role_name)
