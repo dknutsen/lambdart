@@ -31,7 +31,7 @@ module Manager
     "java8" => "java"
   }
   EVENT_SOURCES = %w[s3 dynamodb]
-  FUNCTION_CONFIG_FIELDS = %w[name description runtime role handler timeout memory_size event_sources environments function_per_env dependencies]
+#  FUNCTION_CONFIG_FIELDS = %w[name description runtime role handler timeout memory_size event_sources environments function_per_env dependencies]
 
   # filetypes that will be copied from the function source to the build directory
   # TODO: move this into the project config file so users can change it
@@ -57,7 +57,7 @@ module Manager
 
 
   # reads and validates a function configuration file
-  def self.read_function_config(function_name)
+  def self.read_function_config(function_name, naked=false)
     # TODO: change 'fails' to raise exceptions instead 
     function_config = {}
     begin
@@ -72,6 +72,8 @@ module Manager
     valid = function_config_valid?(function_config)
     abort(valid) unless valid == true
 
+    return function_config if naked == true
+
     # Do some extra processing
     function_config['aws_runtime'] = RUNTIMES[function_config['runtime']][:name]  #TODO: should we do this here?!?
 
@@ -83,13 +85,12 @@ module Manager
     abort("Failed to write function config file, function named #{function_name} does not exist.") unless get_local_functions.include? function_name
     valid = function_config_valid?(config)
     abort(valid) unless valid == true
-    # filter out any additional crap we've tacked onto the config object
-    config_file = {}
-    puts FUNCTION_CONFIG_FIELDS
-    config.each {|item, value| puts config_file[item] = value if FUNCTION_CONFIG_FIELDS.include?(item)}
+#    # filter out any additional crap we've tacked onto the config object
+#    config_file = {}
+#    config.each {|item, value| config_file[item] = value if FUNCTION_CONFIG_FIELDS.include?(item)}
     # now write it
     File.open(($project_root+"src"+function_name+"config.json").to_s, "w") do |f|
-      f.write(JSON.pretty_generate(config_file))
+      f.write(JSON.pretty_generate(config))
     end 
   end
   

@@ -17,6 +17,7 @@ module Lambdart
   class LambdartCLI < Thor
     def initialize(*args)
       super
+      # Define some globals for use in the CLI
       # FIXME: probably a better way of doing this
       # unless we're initializing a new project find our project root, load our secrets files, and create AWS clients
       if $project_commands.include? args[2][:current_command].name
