@@ -38,7 +38,7 @@ module Lambdart
           secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],
           region: creds['AWS_DEFAULT_REGION']
         )
-        $project_root = Manager.find_project_root
+        $project_root = root #Manager.find_project_root
         $project_config = Manager.read_project_config
       end
     end

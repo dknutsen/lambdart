@@ -39,6 +39,9 @@ module Lambdart
         copy_file 'secrets.yml', 'secrets.yml'
       end
 
+      def init_git_repo
+        puts %x(cd #{self.destination_root}; git init)
+      end
 
 #      def create_lib_file
 #        create_file "#{name}/lib/#{name}.rb" do
