@@ -23,6 +23,7 @@ module Lambdart
       if $project_commands.include? args[2][:current_command].name
         root = Manager.find_project_root
         creds = YAML.load(File.read((root+'secrets.yml')).to_s)
+        abort('ERROR: You need to specify AWS credentials in your secrets.yml file') if creds['AWS_ACCESS_KEY_ID'] == 'KEY_HERE' or creds['AWS_SECRET_ACCESS_KEY'] == 'SECRET_KEY_HERE' or creds['AWS_DEFAULT_REGION'] == 'REGION_HERE'
         $lambda_client = Aws::Lambda::Client.new(
           access_key_id: creds['AWS_ACCESS_KEY_ID'],
           secret_access_key: creds['AWS_SECRET_ACCESS_KEY'],

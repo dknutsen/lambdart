@@ -10,12 +10,12 @@ module Lambdart
 
       # Define arguments and options
       argument :role_name
-      argument :template
+      argument :template_file
       #method_option :template, :aliases => "-t", :desc => "Delete the file after parsing it"
       #class_option :template, :aliases => "-t", :desc => "Specify a custom template file instead of the default", :default => "role.json"
 
-      def create_project_config
-        template "#{template}", "#{role_name}.json"
+      def create_role_config
+        template "#{template_file}", "#{role_name}.json"
       end
     end 
  

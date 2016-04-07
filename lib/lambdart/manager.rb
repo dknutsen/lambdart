@@ -15,7 +15,7 @@ module Manager
       :extension => "py"
     },
     "node" => {
-      :name => "nodejs",
+      :name => "nodejs4.3",
       :package_manager => "npm install PACKAGE",
       :extension => "js"
     },

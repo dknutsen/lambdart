@@ -49,6 +49,8 @@ module Lambdart
       puts "Syncing function #{function_config['full_name']}"
 
       # sync function's role first TODO: return arn from this?
+      abort("ERROR: Function #{function_name} does not have a role specified. Please specify one in the function config.") if function_config['role'].empty?
+      abort("ERROR: Specified role \"#{function_config['role']}\" does not exist in the project. Please create it with \"lambdart create role #{function_config['role']}\" or specify a different one in the function config") unless Manager.get_local_roles.include? function_config['role']
       function_config['role_arn'] = sync_role(function_config['role'])
 
       # build function
@@ -131,7 +133,7 @@ module Lambdart
     end
 
     def self.determine_function_env(env, function_config)
-      if function_config.include? 'environments' and (env.empty? or not function_config['environments'].include? env)
+      if function_config.include? 'environments' and function_config['environments'].any? and (env.empty? or not function_config['environments'].include? env)
         fail "Error: function has environments specified but the provided environment (#{env}) is not among them"
       else
         function_config['deploy_env'] = env

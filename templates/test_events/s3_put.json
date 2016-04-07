@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.0",
+            "eventSource": "aws:s3",
+            "awsRegion": "us-east-1",
+            "eventTime": "2016-04-07T20:26:32.246Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "A1WIUU4WRNUXEO"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "127.0.0.1"
+            },
+            "responseElements": {
+                "x-amz-request-id": "19E268BBCBACC542",
+                "x-amz-id-2": "DIoxRcAcI331WoxuSA+MIE2EU2g/u6OQfxpvV3G+n26fOdT1pQIzGnEdTYvsV58M"
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "bucketoftesting_notify_lambda_funcname",
+                "bucket": {
+                    "name": "bucketoftesting",
+                    "ownerIdentity": {
+                        "principalId": "A1WOUU4WTNUOIX"
+                    },
+                    "arn": "arn:aws:s3:::bucketoftesting"
+                },
+                "object": {
+                    "key": "filename.txt",
+                    "size": 12187284,
+                    "eTag": "94898120d83b344d53cbb2019b2125b8",
+                    "sequencer": "005706C2566FE0985A"
+                }
+            }
+        }
+    ]
+}

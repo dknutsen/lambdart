@@ -26,7 +26,7 @@ module Lambda
   # TODO: don't love that we have to pass the role ARN in this way, better way?
   def self.create_remote_function(lambda_client, config)
     Utils.validate_config_args(%w[full_name aws_runtime role_arn handler description timeout memory_size zip_file], config)
-
+pp config
     resp = lambda_client.create_function({
       function_name: config['full_name'],
       runtime:       config['aws_runtime'],
