@@ -1,0 +1,33 @@
+{
+    "Records": [
+        {
+            "eventID": "14a30c1ed3dd7de72316c7cfad936468",
+            "eventName": "INSERT",
+            "eventVersion": "1.0",
+            "eventSource": "aws:dynamodb",
+            "awsRegion": "us-east-1",
+            "dynamodb": {
+                "Keys": {
+                    "CustomerId": {
+                        "S": "a124"
+                    }
+                },
+                "NewImage": {
+                    "Type": {
+                        "S": "Cooler"
+                    },
+                    "CustomerId": {
+                        "S": "a124"
+                    },
+                    "Pet": {
+                        "S": "Moose"
+                    }
+                },
+                "SequenceNumber": "20700000000002939973301",
+                "SizeBytes": 46,
+                "StreamViewType": "NEW_AND_OLD_IMAGES"
+            },
+            "eventSourceARN": "arn:aws:dynamodb:us-east-1:123456789012:table/testdb/stream/2016-04-08T16:06:12.591"
+        }
+    ]
+}

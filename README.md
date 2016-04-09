@@ -44,6 +44,8 @@ Now create a role for that function
 
     $ lambdart create role <role_name>
 
+Edit the role if you desire. The default template includes permissions for all supported role permission types. Lambdart roles are permissive by default. This is convenient but can also be dangerous so it is highly recommended that you specify roles which grant only the necessary permissions and specify resources as explicitly as possible. 
+
 ##### Add the role to the function
 Now edit the function config (`src/<function_name>/config.json`) to include the role.
 

@@ -1,14 +1,14 @@
 {
   "permissions": {
     "s3": [{
-      "actions": [],
-      "bucket": "*"
+      "actions": ["s3:GetObject", "s3:PutObject"],
+      "bucket": "test_bucket"
+    }, {
+      "actions": ["s3:GetObject"],
+      "bucket": "read_only_bucket"
     }],
-    "logging": [{
-      "actions": []
-    }],
-    "lambda_invoke": [{
-      "actions": []
-    }]
+    "logging": [],
+    "lambda_invoke": {},
+    "dynamodb": ""
   }
 }

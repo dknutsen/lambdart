@@ -16,7 +16,7 @@ module Manager
     },
     "node" => {
       :name => "nodejs4.3",
-      :package_manager => "cd PATH; npm init -y; npm install PACKAGE",
+      :package_manager => "cd PATH; npm init -y > /dev/null; npm install PACKAGE > /dev/null",
       :extension => "js"
     },
     "java" => {

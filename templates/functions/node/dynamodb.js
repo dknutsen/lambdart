@@ -1,3 +1,4 @@
+'use strict';
 console.log('Loading function');
 
 var aws = require('aws-sdk');
@@ -16,10 +17,12 @@ try {
 }
 catch (e) { }
 
-exports.handler = function(event, context, callback) {
-  console.log('Received event:', JSON.stringify(event, null, 2));
-  console.log("Lambdart env: " + ENV['LAMBDART_ENV']);
-  // add your handler code here
-
-  callback(null, "success");
+exports.handler = (event, context, callback) => {
+    console.log('Received event:', JSON.stringify(event, null, 2));
+    event.Records.forEach((record) => {
+        console.log(record.eventID);
+        console.log(record.eventName);
+        console.log('DynamoDB Record: %j', record.dynamodb);
+    });
+    callback(null, `Successfully processed ${event.Records.length} records.`);
 };

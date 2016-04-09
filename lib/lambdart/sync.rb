@@ -133,9 +133,9 @@ module Lambdart
     end
 
     def self.determine_function_env(env, function_config)
-      if function_config.include? 'environments' and function_config['environments'].any? and (env.empty? or not function_config['environments'].include? env)
-        fail "Error: function has environments specified but the provided environment (#{env}) is not among them"
-      else
+      if function_config.include? 'environments' and function_config['environments'].any?
+        abort "Error: you need to specify an environment to sync out of the following: #{function_config['environments']}" if env.empty?
+        abort "Error: function has environments specified but the provided environment (#{env}) is not among them" unless function_config['environments'].include? env
         function_config['deploy_env'] = env
       end
     end
