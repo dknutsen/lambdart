@@ -107,6 +107,17 @@ module Lambdart
             psids.push sid
             S3.sync_s3_notification_config($s3_client, config['arn'], source)
           end
+        when "api"
+          sources.each do |source|
+            sid = "#{config['full_name']}_api_gateway_#{source['api_name']}_invoke_statement"
+            puts "    syncing API Gateway event source with sid #{sid}"
+            #source['api_id'] = Api.get_remote_api_id($api_client, 
+            uri_data = {:aws_region=>"us-east-1", :api_version=>"2015-03-31", :aws_acct_id=>"362572083286", :lambda_function_name=>"apitester", :aws_api_id=>"tp0939bh21", :http_method=>"GET"}
+            source_arn = "arn:aws:execute-api:%{aws_region}:%{aws_acct_id}:%{aws_api_id}/*/%{http_method}/%{lambda_function_name}" % uri_data
+            Lambda.add_api_gateway_permission($lambda_client, config['full_name'], sid, source_arn) unless psids.include? sid
+            psids.push sid
+            #S3.sync_s3_notification_config($s3_client, config['arn'], source)
+          end
         else
           puts "  Warning: Invalud event source type #{type} specified, skipping..."
         end

@@ -30,7 +30,7 @@ module Manager
     "nodejs" => "node", 
     "java8" => "java"
   }
-  EVENT_SOURCES = %w[s3 dynamodb]
+  EVENT_SOURCES = %w[s3 dynamodb api]
 #  FUNCTION_CONFIG_FIELDS = %w[name description runtime role handler timeout memory_size event_sources environments function_per_env dependencies]
 
   # filetypes that will be copied from the function source to the build directory

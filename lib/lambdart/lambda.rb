@@ -138,7 +138,7 @@ pp config
     #sid = "#{full_function_name}_dynamodb_#{table_name}_invoke_statement"
     raise NotImplementedError
     lambda_client.add_permission({
-      function_name: full_function_name,
+      function_name: function_name,
       statement_id:  sid,
       action:        "lambda:InvokeFunction",
       principal:     "dynamodb.amazonaws.com",
@@ -146,9 +146,19 @@ pp config
     })
   end
 
-
-
-
+  def self.add_api_gateway_permission(lambda_client, function_name, sid, source_arn="*")
+    # TODO: change args to config?
+    # TODO: generate the sid here or in another function?
+    #sid = "#{full_function_name}_dynamodb_#{table_name}_invoke_statement"
+    #sid = SecureRandom.uuid
+    lambda_client.add_permission({
+      function_name: function_name,
+      statement_id:  sid,
+      action:        "lambda:InvokeFunction",
+      principal:     "apigateway.amazonaws.com",
+      source_arn:    source_arn
+    })
+  end
 
 end
 
